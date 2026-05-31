@@ -17,7 +17,7 @@ class BlogController extends AbstractController
     }
 
 //    /blog/{id} detail satu post
-    #[Route('/blog/{id}', name: 'blog_details', methods: ['GET'])]
+    #[Route('/blog/{id}', name: 'blog_details', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function details(int $id): Response
     {
         $posts = [
