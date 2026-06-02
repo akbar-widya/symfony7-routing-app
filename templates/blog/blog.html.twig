@@ -1,9 +1,9 @@
 <h1 style="text-align: center">Welcome to Blogger</h1>
 <h2>Read popular blogs.</h2>
 <ul>
-    <li><a href="{{ path('blog_details', { id: 1 }) }}">Bangkok Trip</a></li>
-    <li><a href="{{ path('blog_details', { id: 2 }) }}">Graduation Day</a></li>
-    <li><a href="{{ path('blog_details', { id: 3 }) }}">Hiring Result Announcement</a></li>
+    {% for id, post in posts %}
+        <li><a href="{{ path('blog_details', { id: id }) }}">{{ post.title }}</a></li>
+    {% endfor %}
 </ul>
 
 <h2>Authors</h2>
