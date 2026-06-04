@@ -3,13 +3,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\DTO\CreateBlogPostDto;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 
 class BlogController extends AbstractController
 {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {}
 //    /blog render list
     #[Route('/blog', name: 'blog_index', methods: ['GET'])]
     public function show(
@@ -82,5 +88,41 @@ class BlogController extends AbstractController
         return $this->render('blog/author.html.twig', [
             'author' => $author,
         ]);
+    }
+
+    #[Route('/blog/create', name: 'blog_create', methods: ['POST'])]
+    public function create(
+        #[MapRequestPayload] CreateBlogPostDto $blogDto
+    ): Response
+    {
+        $newTitle = $blogDto-> title;
+        $newContent = $blogDto->content;
+
+        // Data is not persisted — stored in memory only for this request.
+        // To save permanently, a database integration is needed.
+        return new Response('Blog post "' . $newTitle . '" created successfully!');
+    }
+
+    #[Route('/blog/log-example', name: 'blog_log', methods: ['GET'])]
+    public function logAction(LoggerInterface $logger): Response
+    {
+        // Symfony automatically injects logger service
+        $logger->info('The blog log action was successfully accessed.');
+
+        return new Response('Action logged successfully.');
+    }
+
+    #[Route('/blog/log/first', name: 'blog_first', methods: ['GET'])]
+    public function firstAction(): Response
+    {
+        $this->logger->info('First action accessed.');
+        return new Response('First action completed.');
+    }
+
+    #[Route('/blog/log/second', name: 'blog_second', methods: ['GET'])]
+    public function secondAction(): Response
+    {
+        $this->logger->info('Second action accessed.');
+        return new Response('Second action completed.');
     }
 }
