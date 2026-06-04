@@ -1,4 +1,9 @@
 <h1 style="text-align: center">Welcome to Blogger</h1>
+
+<form action="{{ path('blog_submit') }}" method="POST">
+    <button type="submit">Create Post</button>
+</form>
+
 <h2>Read popular blogs.</h2>
 <ul>
     {% for id, post in posts %}
@@ -11,3 +16,9 @@
     <li><a href="{{ path('blog_author', { name: 'alfafa' }) }}">Alfafa</a></li>
     <li><a href="{{ path('blog_author', { name: 'raihan' }) }}">Raihan</a></li>
 </ul>
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}

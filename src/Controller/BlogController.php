@@ -16,6 +16,7 @@ class BlogController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {}
+
 //    /blog render list
     #[Route('/blog', name: 'blog_index', methods: ['GET'])]
     public function show(
@@ -124,5 +125,20 @@ class BlogController extends AbstractController
     {
         $this->logger->info('Second action accessed.');
         return new Response('Second action completed.');
+    }
+
+    #[Route('/blog/submit', name: 'blog_submit', methods: ['POST'])]
+    public function submit(): Response
+    {
+        // Internal logic to process the form submission and save to the database goes here...
+
+        // Log the business event behind the scenes
+        $this->logger->info('Data submission processed through /blog/submit path (Route Name: blog_submit).');
+
+        // Add a flash message to the session
+        $this->addFlash('success', 'Your blog post was created successfully!');
+
+        // Safely redirect user to different page to prevent duplicate submissions
+        return $this->redirectToRoute('blog_index');
     }
 }
